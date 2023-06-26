@@ -1,0 +1,56 @@
+﻿@page "/filmlists"
+
+@inject IFilmListService FilmListService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Lista de Filmes e Séries</PageTitle>
+
+<h3>Lista de Filmes e Séries</h3>
+
+<table class="table table-striped">
+    <thead class="table-light">
+        <tr>
+            <th>Título</th>
+            <th>Gênero</th>
+            <th>Tipo</th>
+            <th>Tempo de Duração</th>
+            <th>Escala de Felicidade</th>
+            <th>Título assistido</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody class ="table-group-divider">
+        @foreach (var film in FilmListService.Films)
+        {
+            <tr>
+                <td>@film.Title</td>
+                <td>@film.Gender</td>
+                <td>@film.Type</td>
+                <td>@film.DurationTime</td>
+                <td>@film.HappinessScale</td>
+                <td>@film.Watch.Name</td>
+                <td>
+                    <button class="btn btn-outline-primary btn-sm" @onclick="(() => ShowFilm(film.Id))"><i class="oi oi-pencil"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<button class="btn btn-outline-info btn-sm" @onclick="CreateNewFilm">Criar Novo Título</button>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await FilmListService.GetFilmLists();
+    }
+
+    void ShowFilm (int id)
+    {
+        NavigationManager.NavigateTo($"film/{id}");
+    }
+
+    void CreateNewFilm()
+    {
+        NavigationManager.NavigateTo("/film");
+    }
+}
